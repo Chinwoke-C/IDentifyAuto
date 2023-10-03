@@ -1,0 +1,26 @@
+server:
+port: 8082
+
+spring:
+  graphql:
+    schema:
+      locations: classpath:IDentifyAuto/
+      config:
+          import: secrets.properties
+      #main:
+       #allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    properties:
+      format_sql: false
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: none
+        globally_quoted_identifiers: true
+
