@@ -6,6 +6,7 @@ import com.graphql.IDentifyAuto.data.model.Vehicle;
 import com.graphql.IDentifyAuto.data.repository.LocationRepository;
 import com.graphql.IDentifyAuto.data.repository.VehicleRepository;
 import com.graphql.IDentifyAuto.exception.VehicleExistsException;
+import com.graphql.IDentifyAuto.exception.VehicleNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,9 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     public Vehicle getVehicleByVin(String vin) {
-        return null;
+        return vehicleRepository.findById(vin).orElseThrow(
+        () -> new VehicleNotFoundException(
+                "Vehicle with vin" + vin + "not found"));
     }
 
     @Override
