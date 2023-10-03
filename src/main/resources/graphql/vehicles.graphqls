@@ -4,6 +4,11 @@ type Vehicle {
   make: String!
   model: String!
 }
+type ApiResponse {
+  vin: String
+  message: String
+  isSuccess: Boolean
+}
 
 input Location {
   city: String
