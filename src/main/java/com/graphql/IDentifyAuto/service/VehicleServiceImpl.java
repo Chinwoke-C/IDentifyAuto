@@ -23,14 +23,31 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     @Transactional
-    public ApiResponse addVehicle(VehicleDto vehicleDto) {
+    public ApiResponse registerVehicle(VehicleDto vehicleDto) {
         Optional<Vehicle> existingVehicle = vehicleRepository.findById(vehicleDto.getVin());
         if (existingVehicle.isPresent()){
             Map<String, Object> params = new HashMap<>();
             params.put("vin", vehicleDto.getVin());
             throw new VehicleExistsException("Failed to add vehicle. Vehicle with vin already present.", params);
         }
+        Vehicle vehicle = Vehicle.builder()
+                .vin(vehicleDto.getVin())
+                .make(vehicleDto.getMake())
+                .year(vehicleDto.getYear())
+                .model(vehicleDto.getModel())
+                .location(vehicleDto.getLocation())
+                .build();
+       Vehicle savedVehicle =  vehicleRepository.save(vehicle);
+        locationRepository.save(vehicleDto.getLocation());
+        return getApiResponse(savedVehicle);
+    }
 
+    private ApiResponse getApiResponse(Vehicle savedVehicle) {
+        return ApiResponse.builder()
+                .vin(savedVehicle.getVin())
+                .isSuccess(true)
+                .message("Vehicle registered successfully")
+                .build();
     }
 
     @Override
