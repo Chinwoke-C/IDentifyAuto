@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class VehicleDto {
     private String vin;
     private String make;
-    private String year;
+    private Integer year;
     private String model;
     private Location location;
 }

@@ -10,6 +10,12 @@ input Location {
   state: String
   zipcode: Long!
 }
+input VehicleDto {
+  vin: String!
+  year: Int!
+  make: String!
+  model: String!
+}
 
 type Query {
   getAllVehicles:  [Vehicle]!
