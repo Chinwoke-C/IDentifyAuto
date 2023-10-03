@@ -1,9 +1,6 @@
 package com.graphql.IDentifyAuto.data.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -13,10 +10,11 @@ import lombok.*;
 @Entity
 public class Vehicle {
     @Id
-    private long vin;
+    private String vin;
     private String make;
     private String year;
     private String model;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_location")
     private Location location;
 }
