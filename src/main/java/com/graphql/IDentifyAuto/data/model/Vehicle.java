@@ -13,7 +13,7 @@ public class Vehicle {
     @Id
     private String vin;
     private String make;
-    private String year;
+    private Integer year;
     private String model;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_location")

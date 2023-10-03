@@ -4,7 +4,7 @@ port: 8082
 spring:
   graphql:
     schema:
-      locations: classpath:IDentifyAuto/
+      locations: classpath:graphql/
       config:
           import: secrets.properties
       #main:
