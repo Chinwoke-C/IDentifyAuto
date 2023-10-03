@@ -2,19 +2,19 @@ package com.graphql.IDentifyAuto.service;
 
 import com.graphql.IDentifyAuto.data.dto.ApiResponse;
 import com.graphql.IDentifyAuto.data.dto.VehicleDto;
+import com.graphql.IDentifyAuto.data.model.Location;
 import com.graphql.IDentifyAuto.data.model.Vehicle;
 import com.graphql.IDentifyAuto.data.repository.LocationRepository;
 import com.graphql.IDentifyAuto.data.repository.VehicleRepository;
+import com.graphql.IDentifyAuto.exception.InvalidInputException;
 import com.graphql.IDentifyAuto.exception.VehicleExistsException;
 import com.graphql.IDentifyAuto.exception.VehicleNotFoundException;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -60,11 +60,17 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     public List<Vehicle> getAllVehicles() {
-        return null;
+        return vehicleRepository.findAll();
     }
 
     @Override
-    public List<Vehicle> searchByLocation(String zipCode) {
-        return null;
+    public List<Vehicle> searchByLocation(Long zipCode) {
+        if (zipCode == null || String.valueOf(zipCode).length() != 5) {
+            throw new InvalidInputException("Invalid zipcode " + zipCode + " provided.");
+        }
+        return this.locationRepository.findById(zipCode)
+                .map(Location::getVehicles)
+                .orElse(new ArrayList<>());
+
     }
 }

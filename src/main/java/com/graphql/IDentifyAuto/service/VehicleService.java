@@ -10,5 +10,5 @@ public interface VehicleService {
     ApiResponse registerVehicle(VehicleDto vehicleDto);
     Vehicle getVehicleByVin(String vin);
     List<Vehicle> getAllVehicles();
-    List<Vehicle> searchByLocation(String zipCode);
+    List<Vehicle> searchByLocation(Long zipCode);
 }
