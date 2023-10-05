@@ -29,12 +29,6 @@ input VehicleDto {
   location: LocationInput
 }
 
-type Query {
-  getAllVehicles:  [Vehicle]!
-  searchByLocation(zipCode: String!): [Vehicle]
-  getVehicleByVin(vin: String!): Vehicle
-}
-
-type Mutation {
-  registerVehicle(vehicleRequest: VehicleDto!): Vehicle!
-}
+::x:x
+:wq
+:q
