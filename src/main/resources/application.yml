@@ -1,20 +1,17 @@
 server:
-port: 8082
+  port: 8082
 
 spring:
+  profiles:
+    active: dev
   graphql:
     schema:
-      locations: classpath:graphql/
-      config:
-          import: secrets.properties
-      #main:
-       #allow-bean-definition-overriding: true
+      locations: classpath:graphql
   datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    url: jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
   jpa:
     show-sql: true
     properties:

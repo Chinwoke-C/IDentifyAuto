@@ -9,38 +9,41 @@ import com.graphql.IDentifyAuto.data.repository.VehicleRepository;
 import com.graphql.IDentifyAuto.exception.InvalidInputException;
 import com.graphql.IDentifyAuto.exception.VehicleExistsException;
 import com.graphql.IDentifyAuto.exception.VehicleNotFoundException;
-import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class VehicleServiceImpl implements VehicleService{
     private final VehicleRepository vehicleRepository;
     private final LocationRepository locationRepository;
 
     @Override
     @Transactional
-    public ApiResponse registerVehicle(VehicleDto vehicleDto) {
-        Optional<Vehicle> existingVehicle = vehicleRepository.findById(vehicleDto.getVin());
+    public Vehicle registerVehicle(VehicleDto vehicleRequest) {
+
+        Optional<Vehicle> existingVehicle = vehicleRepository.findById(vehicleRequest.getVin());
         if (existingVehicle.isPresent()){
-            Map<String, Object> params = new HashMap<>();
-            params.put("vin", vehicleDto.getVin());
-            throw new VehicleExistsException("Failed to add vehicle. Vehicle with vin already present.", params);
+//              Map<String, Object> params = new HashMap<>();
+//            params.put("vin", vehicleRequest.getVin());
+            throw new VehicleExistsException("Failed to add vehicle. Vehicle with vin" + vehicleRequest.getVin() + "already present.");
         }
-        Vehicle vehicle = Vehicle.builder()
-                .vin(vehicleDto.getVin())
-                .make(vehicleDto.getMake())
-                .year(vehicleDto.getYear())
-                .model(vehicleDto.getModel())
-                .location(vehicleDto.getLocation())
-                .build();
-       Vehicle savedVehicle =  vehicleRepository.save(vehicle);
-        locationRepository.save(vehicleDto.getLocation());
-        return getApiResponse(savedVehicle);
+        Vehicle vehicle = new Vehicle();
+                vehicle.setVin(vehicleRequest.getVin());
+                vehicle.setMake(vehicleRequest.getMake());
+                vehicle.setYear(vehicleRequest.getYear());
+                vehicle.setModel(vehicleRequest.getModel());
+                vehicle.setLocation(vehicleRequest.getLocation());
+
+        locationRepository.save(vehicleRequest.getLocation());
+        //return getApiResponse(savedVehicle);
+        return vehicleRepository.save(vehicle);
     }
 
     private ApiResponse getApiResponse(Vehicle savedVehicle) {
@@ -64,11 +67,11 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
-    public List<Vehicle> searchByLocation(Long zipCode) {
-        if (zipCode == null || String.valueOf(zipCode).length() != 5) {
+    public List<Vehicle> searchByLocation(String zipCode) {
+        if (StringUtils.isEmpty(zipCode) || zipCode.length() != 5) {
             throw new InvalidInputException("Invalid zipcode " + zipCode + " provided.");
         }
-        return this.locationRepository.findById(zipCode)
+        return locationRepository.findByZipCode(zipCode)
                 .map(Location::getVehicles)
                 .orElse(new ArrayList<>());
 

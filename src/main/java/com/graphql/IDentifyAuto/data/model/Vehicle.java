@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "vehicle")
 public class Vehicle {
     @Id
     private String vin;

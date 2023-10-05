@@ -14,9 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "location")
 public class Location {
     @Id
-    private Long zipCode;
+    private String zipCode;
     private String city;
     private String state;
 

@@ -7,8 +7,8 @@ import com.graphql.IDentifyAuto.data.model.Vehicle;
 import java.util.List;
 
 public interface VehicleService {
-    ApiResponse registerVehicle(VehicleDto vehicleDto);
+    Vehicle registerVehicle(VehicleDto vehicleDto);
     Vehicle getVehicleByVin(String vin);
     List<Vehicle> getAllVehicles();
-    List<Vehicle> searchByLocation(Long zipCode);
+    List<Vehicle> searchByLocation(String zipCode);
 }

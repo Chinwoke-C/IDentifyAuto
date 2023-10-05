@@ -1,8 +1,9 @@
 type Vehicle {
-  vin: ID!
-  year: Int!
-  make: String!
-  model: String!
+  vin: String
+  year: Int
+  make: String
+  model: String
+  location: Location
 }
 type ApiResponse {
   vin: String
@@ -10,24 +11,30 @@ type ApiResponse {
   isSuccess: Boolean
 }
 
-input Location {
+type Location {
+  zipCode: String!
   city: String
   state: String
-  zipcode: Long!
+}
+input LocationInput {
+  zipCode: String!
+  city: String!
+  state: String!
 }
 input VehicleDto {
-  vin: String!
+  vin : String!
   year: Int!
   make: String!
   model: String!
+  location: LocationInput
 }
 
 type Query {
   getAllVehicles:  [Vehicle]!
-  searchByLocation(zipcode: Long!): [Vehicle]!
+  searchByLocation(zipCode: String!): [Vehicle]
   getVehicleByVin(vin: String!): Vehicle
 }
 
 type Mutation {
-  registerVehicle(vehicleDto: VehicleDto!): ApiResponse!
+  registerVehicle(vehicleRequest: VehicleDto!): Vehicle!
 }
